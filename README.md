@@ -168,3 +168,13 @@ It's a good idea to do this until traefik is configured otherwise you won't have
 ```
 kubectl expose deployment rancher -n cattle-system --type=LoadBalancer --name=rancher-lb --port=443
 ```
+
+Check the service to see what IP it was given. Make note of the rancher-lb service EXTERNAL-IP
+`kubectl get svc -n cattle-system -o wide`
+
+
+Now **important** to access the Rancher UI you need to create a local DNS entry for you URL that point to the IP Address it got from Metal LB. 
+
+> example: rancher.domain.com = 192.16.1.240
+
+_Note: you can validate it done right by doing an nslookup rancher.domain.com_
