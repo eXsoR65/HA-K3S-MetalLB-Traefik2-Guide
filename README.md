@@ -7,11 +7,14 @@ Setting up a HA K3S Cluster with emmended etcd DB, Rancher, metallb and traefik2
 # Part 1: 
 ##### Setting up and configure Nginx LB for K3S API servers.
 
+You can install Nginx on a Linux machine or in a Docker Container 
+
 Installing Nginx on Ubuntu.
 `sudo apt install -y nginx`
-
 Uninstall Nginx (for any reason you may need to).
 `sudo apt purge nginx* libnginx* && sudo apt autoremove`
+
+###### If you are using a container then all you need is the config you'll find below. 
 
 ##### Nginx conf file found in: /etc/nginx/nginx.conf
 Example configuration for K3S
@@ -26,7 +29,7 @@ stream {
   upstream k3s_servers {
     server ip_address:6443;
     server ip_address:6443;
-    server ip_address:6443;
+	server ip_address:6443;
   }
 
   server {
@@ -178,3 +181,109 @@ Now **important** to access the Rancher UI you need to create a local DNS entry 
 > example: rancher.domain.com = 192.16.1.240
 
 _Note: you can validate it done right by doing an nslookup rancher.domain.com_
+
+----
+
+# Part 4
+###### Installing and configuring Traefik v2 as a Reverse Proxy.
+
+
+## Install Traefik 2
+
+You can can choose between creating `Ingress` in Rancher or `IngresRoute` with `traefik` If you choose `IngressRoute` pleasse use the config in `/configingress-route/traefik-config.yaml`
+
+-   You must have a persistent volume set up already for `acme.json` certificate
+-   This uses cloudflare, check providers if you want to switch
+-   This will get wildcard certs
+-   This is pointed at staging, if you want production be sure comment staging the line (and delete your staging certs)
+
+We will be installing this into the `kube-system` namespace, which already exists. If you are going to use anther namespace you will need change it everywhere.
+
+add `traefik` helm repo and update
+
+```
+helm repo add traefik https://helm.traefik.io/traefik
+helm repo update
+```
+
+create `traefik-config.yaml` with the contents from `/config/traefik-config.yaml`
+
+this holds our cloudflare secrets along with a configmap
+
+update this file with your values
+
+apply the config
+
+`kubectl apply -f traefik-config.yaml`
+
+create `traefik-chart-values.yaml` with the contents from `/config/traefik-chart-values.yaml`
+
+Update `loadBalancerIP` in `traefik-chart-values.yaml` with your Metal LB IP
+
+Before running this, be sure you only have one default storage class set. If you are using Rancher it is Cluster>Storage>Storage Classes. Make sure only one is default.
+
+create config then update the values
+
+`kubectl apply -f traefik-config.yaml`
+
+`helm install traefik traefik/traefik --namespace=kube-system --values=traefik-chart-values.yaml`
+
+
+If all went well, you should now have traefik 2 installed and configured.
+
+## [](https://github.com/techno-tim/youtube-videos/tree/master/traefik2-k3s-rancher#exposing-a-service-with-traefik-and-rancher-ingress)
+
+## Exposing a service with traefik and Rancher Ingress
+
+In Rancher go to Load Balancing
+
+-   create ingress
+-   choose a host name (service.example.com)
+-   choose a target (your workload)
+-   set the port to the exposed port within the container
+-   go to labels and annotations and add `kubernetes.io/ingress.class` = `traefik-external`
+-   note, `traefik-external` comes from `--providers.kubernetesingress.ingressclass=traefik-external` in `traefik-chart-values.yml`. If you used something else, you will need to set your label properly.
+-   when you visit your website (`https://service.example.com`) you should now see a certificate issues. If it's a staging cert, see the note about switching to production in `traefik-chart-values.yaml`. After changing, you will need to delete your certs in storage and reapply that file
+
+```
+kubectl delete -n kube-system persistentvolumeclaims acme-json-certs
+kubectl apply -f traefik-config.yaml
+```
+
+## [](https://github.com/techno-tim/youtube-videos/tree/master/traefik2-k3s-rancher#exposing-a-service-with-traefik-ingressroute)
+
+## Exposing a service with traefik `IngressRoute`
+
+copy the contents os `/config-ingress-route/kubernetes` to your local machine
+
+then run
+
+`kubectl apply -f kubernetes`
+
+This will create the deployment, service, and ingress.
+
+## [](https://github.com/techno-tim/youtube-videos/tree/master/traefik2-k3s-rancher#dashboard)
+
+## Dashboard
+
+First you will need `htpassword` to generate a password for your dashboard
+
+`sudo apt-get update && sudo apt-get install apache2-utils`
+
+You can then genate one using this, be sure to swap your username and password
+
+`htpasswd -nb techno password | openssl base64`
+
+it should output
+
+`dGVjaG5vOiRhcHIxJFRnVVJ0N2E1JFpoTFFGeDRLMk8uYVNaVWNueG41eTAKCg==`
+
+copy `traefik-dashboard-secret.yaml` locally and update it with your credentials
+
+then apply
+
+`kubectl apply -f traefik-config.yaml`
+
+copy `traefik-dashboard-ingressroute.yaml` and update it with your hostname
+
+Save this in a secure place, it will be the password you use to access the traefik dashboard
