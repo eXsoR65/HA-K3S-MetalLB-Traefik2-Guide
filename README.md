@@ -51,7 +51,7 @@ Run the on first server **only** (as it enables Etcd).
 
 ```
 export INSTALL_K3S_VERSION=v1.20.5+k3s1
-curl -sfL https://get.k3s.io | sh -s - server --cluster-init --node-taint CriticalAddonsOnly=true:NoExecute --tls-san 172.16.1.50 --write-kubeconfig-mode 644 --disable traefik --disable servicelb
+curl -sfL https://get.k3s.io | sh -s - server --cluster-init --node-taint CriticalAddonsOnly=true:NoExecute --tls-san ip_address_of_lb --write-kubeconfig-mode 644 --disable traefik --disable servicelb
 ```
 
 
