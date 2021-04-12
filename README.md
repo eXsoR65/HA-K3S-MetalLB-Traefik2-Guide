@@ -214,7 +214,9 @@ update this file with your values
 
 apply the config
 
-`kubectl apply -f traefik-config.yaml`
+```
+kubectl apply -f traefik-config.yaml
+```
 
 create `traefik-chart-values.yaml` with the contents from `/config/traefik-chart-values.yaml`
 
@@ -224,14 +226,15 @@ Before running this, be sure you only have one default storage class set. If you
 
 create config then update the values
 
-`kubectl apply -f traefik-config.yaml`
+```
+kubectl apply -f traefik-config.yaml
+```
 
-`helm install traefik traefik/traefik --namespace=kube-system --values=traefik-chart-values.yaml`
-
+```
+helm install traefik traefik/traefik --namespace=kube-system --values=traefik-chart-values.yaml
+```
 
 If all went well, you should now have traefik 2 installed and configured.
-
-## [](https://github.com/techno-tim/youtube-videos/tree/master/traefik2-k3s-rancher#exposing-a-service-with-traefik-and-rancher-ingress)
 
 ## Exposing a service with traefik and Rancher Ingress
 
@@ -250,39 +253,46 @@ kubectl delete -n kube-system persistentvolumeclaims acme-json-certs
 kubectl apply -f traefik-config.yaml
 ```
 
-## [](https://github.com/techno-tim/youtube-videos/tree/master/traefik2-k3s-rancher#exposing-a-service-with-traefik-ingressroute)
-
 ## Exposing a service with traefik `IngressRoute`
 
 copy the contents os `/config-ingress-route/kubernetes` to your local machine
 
 then run
 
-`kubectl apply -f kubernetes`
+```
+kubectl apply -f kubernetes
+```
 
 This will create the deployment, service, and ingress.
-
-## [](https://github.com/techno-tim/youtube-videos/tree/master/traefik2-k3s-rancher#dashboard)
 
 ## Dashboard
 
 First you will need `htpassword` to generate a password for your dashboard
 
-`sudo apt-get update && sudo apt-get install apache2-utils`
+```
+sudo apt-get update
+sudo apt-get install apache2-utils
+```
 
 You can then genate one using this, be sure to swap your username and password
 
-`htpasswd -nb techno password | openssl base64`
+```
+htpasswd -nb techno password | openssl base64
+```
 
 it should output
 
-`dGVjaG5vOiRhcHIxJFRnVVJ0N2E1JFpoTFFGeDRLMk8uYVNaVWNueG41eTAKCg==`
+```
+dGVjaG5vOiRhcHIxJFRnVVJ0N2E1JFpoTFFGeDRLMk8uYVNaVWNueG41eTAKCg==
+```
 
 copy `traefik-dashboard-secret.yaml` locally and update it with your credentials
 
 then apply
 
-`kubectl apply -f traefik-config.yaml`
+```
+kubectl apply -f traefik-config.yaml
+```
 
 copy `traefik-dashboard-ingressroute.yaml` and update it with your hostname
 
