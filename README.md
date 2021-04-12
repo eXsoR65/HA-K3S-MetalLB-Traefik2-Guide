@@ -26,7 +26,7 @@ stream {
   upstream k3s_servers {
     server ip_address:6443;
     server ip_address:6443;
-	server ip_address:6443;
+    server ip_address:6443;
   }
 
   server {
