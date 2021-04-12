@@ -1,8 +1,6 @@
-# HA-K3S-MetalLB-Traefik2
-Setting up a HA K3S Cluster with emmended etcd DB, Rancher, metallb and traefik2
-
 
 ## K3S Cluster Setup with Etcd embedded DB
+Setting up a HA K3S Cluster with emmended etcd DB, Rancher, metallb and traefik2
 
 ----
 
