@@ -1,6 +1,9 @@
 
-## K3S Cluster Setup with Etcd embedded DB
-Setting up a HA K3S Cluster with emmended etcd DB, Rancher, metallb and traefik2
+## K3S Cluster Setup with etcd embedded DB
+Setting up a HA K3S Cluster with embedded etcd DB, Rancher, metallb and traefik2
+
+### I have to give credit to **TechnoTim** https://github.com/techno-tim 
+(This is based on his guide but I added the etcd embedded database instead of an external Database)
 
 ----
 
@@ -11,6 +14,7 @@ You can install Nginx on a Linux machine or in a Docker Container
 
 Installing Nginx on Ubuntu.
 `sudo apt install -y nginx`
+
 Uninstall Nginx (for any reason you may need to).
 `sudo apt purge nginx* libnginx* && sudo apt autoremove`
 
