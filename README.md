@@ -2,9 +2,10 @@
 ## K3S Cluster Setup with etcd embedded DB
 Setting up a HA K3S Cluster with embedded etcd DB, Rancher, metallb and traefik2
 
-### I have to give credit to **TechnoTim** https://github.com/techno-tim 
-(This is based on his guide but I added the etcd embedded database instead of an external Database)
+### I have to give credit to [TechnoTim](https://github.com/techno-tim) 
+#### (This is based on his [guide](https://techno-tim.github.io/posts/k3s-traefik-rancher/) but I added the etcd embedded database instead of an external Database)
 
+<br>
 ----
 
 # Part 1: 
@@ -42,7 +43,7 @@ stream {
   }
 }
 ```
-
+<br>
 ----
 
 # Part 2
@@ -85,6 +86,7 @@ You need to install kubectl on your dev machine to manage the cluster.  - [Insta
  - Past the config to your dev machine at `~/.kube/config`
 *Note: Be sure to update the `server:` to your load balancer IP Address or Hostname.*
 
+<br>
 ----
 
 # Part 3
@@ -186,8 +188,8 @@ Now **important** to access the Rancher UI you need to create a local DNS entry 
 
 _Note: you can validate it done right by doing an nslookup rancher.domain.com_
 
+<br>
 ----
-
 # Part 4
 ###### Installing and configuring Traefik v2 as a Reverse Proxy.
 
