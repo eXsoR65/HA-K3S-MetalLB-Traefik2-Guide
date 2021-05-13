@@ -187,7 +187,7 @@ Now **important** to access the Rancher UI you need to create a local DNS entry 
 
 > example: rancher.domain.com = 192.16.1.240
 
-_Note: you can validate it done right by doing an nslookup rancher.domain.com_
+_Note: you can validate it by doing an nslookup rancher.domain.com_
 
 <br>
 
