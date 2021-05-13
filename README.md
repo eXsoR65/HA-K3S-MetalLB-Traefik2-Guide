@@ -20,6 +20,7 @@ Uninstall Nginx (for any reason you may need to).
 `sudo apt purge nginx* libnginx* && sudo apt autoremove`
 
 ###### If you are using a container then all you need is the config you'll find below. 
+###### Otherwise if installing on a VM uncomment the load_module line
 
 ##### Nginx conf file found in: /etc/nginx/nginx.conf
 Example configuration for K3S
@@ -54,7 +55,7 @@ I will be choosing to run version v1.20.5+k3s1 so do a before running the script
 
 Run the on first server **only** (as it enables Etcd).
 
-```
+```Bash
 export INSTALL_K3S_VERSION=v1.20.5+k3s1
 curl -sfL https://get.k3s.io | sh -s - server --cluster-init --node-taint CriticalAddonsOnly=true:NoExecute --tls-san ip_address_of_lb --write-kubeconfig-mode 644 --disable traefik --disable servicelb
 ```
@@ -65,7 +66,7 @@ To get the K3S_TOKEN run the following on the first server
 
 
 Run on the other Server nodes. 
-```
+```Bash
 export INSTALL_K3S_VERSION=v1.20.5+k3s1
 curl -sfL https://get.k3s.io | sh -s - server --server https://ip_address_lb:6443 --token longe_token_here --node-taint CriticalAddonsOnly=true:NoExecute --tls-san ip_address_of_lb --write-kubeconfig-mode 644 --disable traefik --disable servicelb
 ```
@@ -73,7 +74,7 @@ curl -sfL https://get.k3s.io | sh -s - server --server https://ip_address_lb:644
 
 #### Run on the worker nodes. 
 
-```
+```Bash
 export INSTALL_K3S_VERSION=v1.20.5+k3s1
 k3s_token="long_token_here"
 k2s_url="https://ip_address_of_lb:6443"
@@ -109,7 +110,7 @@ Create rancher namespace
 ###### Use rancher generated (default)
 
 - Install cert-manager
-```
+```Bash
 kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v1.2.0/cert-manager.crds.yaml
 ```
 
@@ -126,7 +127,7 @@ kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/relea
 
 _Note: If you receive an "Error: Kubernetes cluster unreachable" message when installing cert-manager, try copying the contents of "/etc/rancher/k3s/k3s.yaml" to "~/.kube/config" to resolve the issue._
 
-```
+```Bash
 helm install \
   cert-manager jetstack/cert-manager \
   --namespace cert-manager \
@@ -137,13 +138,13 @@ Check rollout of cert-manager
 `kubectl get pods --namespace cert-manager`
 
 Now we can proceed to install Rancher. 
-```
+```Bash
 helm install rancher rancher-stable/rancher \
   --namespace cattle-system \
   --set hostname=rancher.example.com \
   --version 2.5.7
 ```
-(_Note: here we are installing version 2.5.7 change is needed._)
+(_Note: here we are installing version 2.5.7 change if needed._)
 
 ### Now before we can access the Rancher UI  we need to install a load balancer and expose it as a service. 
 
@@ -174,7 +175,7 @@ data:
 
 It's a good idea to do this until traefik is configured otherwise you won't have access to the Rancher Ui
 
-```
+```Bash
 kubectl expose deployment rancher -n cattle-system --type=LoadBalancer --name=rancher-lb --port=443
 ```
 
@@ -283,7 +284,7 @@ sudo apt-get install apache2-utils
 
 You can then genate one using this, be sure to swap your username and password
 
-```
+```Bash
 htpasswd -nb techno password | openssl base64
 ```
 
