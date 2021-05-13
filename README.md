@@ -1,9 +1,9 @@
 
-## K3S Cluster Setup with etcd embedded DB
+## K3S Cluster Setup with etcd embedded DB, Managed with Rancher
 Setting up a HA K3S Cluster with embedded etcd DB, Rancher, metallb and traefik2
 
 ### I have to give credit to [TechnoTim](https://github.com/techno-tim) 
-#### (This is based on his [guide](https://techno-tim.github.io/posts/k3s-traefik-rancher/) but I added the etcd embedded database instead of an external Database)
+#### (This is based on his [guide](https://techno-tim.github.io/posts/k3s-traefik-rancher/) But I opted to use embedded etcd db instead of an external db and show how to crate it from start to end.)
 
 <br>
 
