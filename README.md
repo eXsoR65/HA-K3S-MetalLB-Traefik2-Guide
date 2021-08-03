@@ -77,7 +77,7 @@ curl -sfL https://get.k3s.io | sh -s - server --server https://ip_address_lb:644
 ```Bash
 export INSTALL_K3S_VERSION=v1.20.5+k3s1
 k3s_token="long_token_here"
-k2s_url="https://ip_address_of_lb:6443"
+k3s_url="https://ip_address_of_lb:6443"
 curl -sfL https://get.k3s.io | K3S_URL=${k2s_url} K3S_TOKEN=${k3s_token} sh -
 ```
 
