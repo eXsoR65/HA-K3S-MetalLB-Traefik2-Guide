@@ -1,3 +1,9 @@
+## The instuctions are outdated now, but will leave here for education purposes.
+
+02/2022
+
+
+----
 
 ## K3S Cluster Setup with etcd embedded DB, Managed with Rancher
 Setting up a HA K3S Cluster with embedded etcd DB, Rancher, metallb and traefik2
